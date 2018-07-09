@@ -1,1 +1,1 @@
-Example GPS File
+Example GPS Folder Structure
