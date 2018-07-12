@@ -53,7 +53,7 @@ for (csdir in SubDirNames)
   #plot 2.5km circle for virtual vanishing bearings
   
   #colors for different tracks
-  factpal <- colorFactor(topo.colors(FileNames), FileNames, na.color = "#808080")
+  factpal <- colorFactor(topo.colors(length(FileNames)), FileNames, na.color = "#808080")
   
   #process all files in subfolder
   for (cfile in FileNames)
@@ -78,7 +78,7 @@ for (csdir in SubDirNames)
     coordinates(sdf)<-~lon+lat
     proj4string(sdf)<-CRS(wgs84)
     
-    ll<-addPolylines(ll,data=sdf@coords, group = cfile ,color='#FF0000', weight = 2, opacity = 1)
+    ll<-addPolylines(ll,data=sdf@coords, group=cfile ,color=factpal(cfile), weight = 2, opacity = 1)
     
   }
   #layers control elements
