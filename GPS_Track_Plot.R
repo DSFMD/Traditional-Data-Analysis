@@ -3,6 +3,7 @@
 # Code by Ingo Schiffner 2018
 
 library(leaflet) # required for interactive map display
+library(sp) # spatial data frame
 library(data.table) # better than data frame
 library(htmlwidgets) # for saving html widgets
 
@@ -15,6 +16,8 @@ utm<-"+proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 #select data folder
 cdir<-choose.dir(default = "", caption = "Select folder")
 SubDirNames <- list.files(path = cdir, pattern = NULL, all.files = FALSE, full.names = FALSE, recursive = FALSE, ignore.case = FALSE)
+
+vdx <- c(1000,2000,3000)
 
 #load meta data
 loc_dt <- read.table("meta_data/sites.txt", header=T, sep=",", quote='"', dec=",", na.strings="", colClasses="character", fill=TRUE, strip.white=TRUE, blank.lines.skip=TRUE)
@@ -47,6 +50,11 @@ for (csdir in SubDirNames)
     addProviderTiles('Esri.WorldImagery', group = "Satellite") %>%
     addProviderTiles('Esri.WorldShadedRelief', group = "Relief")
   
+  #plot 2.5km circle for virtual vanishing bearings
+  
+  #colors for different tracks
+  factpal <- colorFactor(topo.colors(FileNames), FileNames, na.color = "#808080")
+  
   #process all files in subfolder
   for (cfile in FileNames)
   {
@@ -74,7 +82,33 @@ for (csdir in SubDirNames)
     
   }
   #layers control elements
-  ll<-addLayersControl(ll,baseGroups = c("Positron", "Toner", "Satellite", "Relief"), overlayGroups = FileNames,
+  ll<-addCircleMarkers(ll,data=loc_dt[sdx,],
+                     radius = 10,
+                     weight = 3,
+                     color = "#FFFFFF",
+                     stroke = T,
+                     fillColor = "#00FF00",
+                     fillOpacity = 1,
+                     group ="Release Site") %>%
+    
+    addCircleMarkers(data=loc_dt[1,],
+                     radius = 10,
+                     weight = 3,
+                     color = "#FFFFFF",
+                     stroke = T,
+                     fillColor = "#0000FF",
+                     fillOpacity = 1,
+                     group ="Home Loft") %>%
+    addCircles(data=loc_dt[sdx,],
+                     radius = vdx,
+                     weight = 3,
+                     color = "#000000",
+                     stroke = T,
+                     fillColor = "#0000FF",
+                     fillOpacity = 0,
+                     group ="Vanishing Bearing") %>%
+    addLayersControl(baseGroups = c("Positron", "Toner", "Satellite", "Relief"), overlayGroups = c("Release Site","Home Loft", FileNames),
                        options = layersControlOptions(collapsed = FALSE))
-  saveWidget(ll, file=paste('.\\plot\\',csdir,".html",sep=''))
+  f<-paste('.\\plot\\',csdir,".html",sep='')
+  saveWidget(ll,file.path(normalizePath(dirname(f)),basename(f)))
 }
