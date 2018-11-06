@@ -1,6 +1,6 @@
 # Traditional-Data-Analysis
 Traditional Methods for Analysis of Animal Navigation</br>
-<b><i>requires the files in the "shared" repository</i></b></br>
+<b><i>requires the files in the "shared" repository</i></b></br></br>
 Gps data should be sorted by release site with subdirectories for each site. Code assumes that the file format is .csv, as produced by 
 IgotU GPS recorders. Format should be: Date, Time, Latitude, Longitude, Altitude, Speed, Course, Type, Distance, Essential. File naming convention is YYMMDD_XX-YYYYY_EXP (i.e. DATE (in reverse order) BIRD ID and type of EXPERIMENT). You will also need to set up a folder meta_data containing a file called sites. txt, file needs to contain name and the wgs84 coordinates(lat/lon) for the release sites e.g.:</br></br>
 Site,lat,lon</br>
