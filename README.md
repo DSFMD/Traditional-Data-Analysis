@@ -1,5 +1,6 @@
 # Traditional-Data-Analysis
 Traditional Methods for Analysis of Animal Navigation
+<b><i>requires the files in the "shared" repository</i></b>
   </br>
   <ul>
   <li><b>Plotting:</b>
