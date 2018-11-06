@@ -1,1 +1,0 @@
-Example GPS Folder Structure
